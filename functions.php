@@ -857,6 +857,9 @@ function get_view_graph_elements($view) {
           if (isset($item['alias'])) {
 	    $view_e['alias'] = $item['alias'];
           }
+          if (isset($item['percent'])) {
+	    $view_e['percent'] = $item['percent'];
+          }
 
           $view_e["graph_args"] = join("&", $graph_args_array);
           $view_e['hostname'] = $hostname;

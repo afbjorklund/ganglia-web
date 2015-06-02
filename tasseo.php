@@ -128,6 +128,14 @@ foreach ( $view_elements as $index => $element ) {
       } else {
         $tasseo_e['name'] = ($conf['strip_domainname'] ? strip_domainname($element['hostname']) : $element['hostname']) . " " . $element['name'];
       }
+      if ( isset($element['cluster']) && isset($element['percent'])) {
+         global $start, $end;
+         $start = '-30m';
+         $end = 'now';
+         $avg_max = find_avg($element['cluster'], $element['hostname'], $element['percent']);
+         if ($avg_max == 0) $avg_max = 1;
+         $tasseo_e['percent'] = $avg_max;
+      }
       if ( isset($element['alias']))
          $tasseo_e['alias'] = $element['alias'];
       if ( isset($element['warning']))

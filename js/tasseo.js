@@ -28,6 +28,10 @@ function constructGraphs() {
         data: datum[i]
       }]
     });
+    if (metrics[i].percent) {
+      graphs[i].max=100.0;
+      metrics[i].unit='%';
+    }
     graphs[i].render();
   }
 }
@@ -38,7 +42,10 @@ function refreshData(immediately) {
   for (var i=0; i<graphs.length; i++) {
     getData(function(j, values) {
       for (var k=0; k<values.length; k++) {
-        datum[j][k] = values[k];
+        if (values[k] && !isNaN(values[k].y) && metrics[j].percent)
+          datum[j][k] = {x:values[k].x, y:(100.0 * values[k].y) / metrics[j].percent};
+        else
+          datum[j][k] = values[k];
       }
 
       // check our thresholds and update color
@@ -126,6 +133,9 @@ function updateGraphs(i) {
       lastValueDisplay = Math.round(lastValue*1000)/1000;
     } else {
       lastValueDisplay = parseInt(lastValue)
+    }
+    if (metrics[i].percent && !isNaN(lastValue)) {
+      lastValueDisplay = lastValue.toFixed(0);
     }
     $('.overlay-name' + i).text(aliases[i]);
     $('.overlay-number' + i).text(lastValueDisplay);
