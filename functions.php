@@ -847,10 +847,16 @@ function get_view_graph_elements($view) {
 	  
           if (isset($item['warning'])) {
             $view_e['warning'] = $item['warning'];
+            if (isset($item['inverse']))
+            $graph_args_array[] = "warn=" . ($item['inverse'] - $item['warning']);
+            else
             $graph_args_array[] = "warn=" . $item['warning'];
           }
           if (isset($item['critical'])) {
             $view_e['critical'] = $item['critical'];
+            if (isset($item['inverse']))
+            $graph_args_array[] = "crit=" . ($item['inverse'] - $item['critical']);
+            else
             $graph_args_array[] = "crit=" . $item['critical'];
           }
 
@@ -859,6 +865,9 @@ function get_view_graph_elements($view) {
           }
           if (isset($item['percent'])) {
 	    $view_e['percent'] = $item['percent'];
+          }
+          if (isset($item['inverse'])) {
+	    $view_e['inverse'] = $item['inverse'];
           }
 
           $view_e["graph_args"] = join("&", $graph_args_array);

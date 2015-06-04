@@ -136,6 +136,8 @@ foreach ( $view_elements as $index => $element ) {
          if ($avg_max == 0) $avg_max = 1;
          $tasseo_e['percent'] = $avg_max;
       }
+      if ( isset($element['inverse']))
+         $tasseo_e['inverse'] = $element['inverse'];
       if ( isset($element['alias']))
          $tasseo_e['alias'] = $element['alias'];
       if ( isset($element['warning']))

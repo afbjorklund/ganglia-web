@@ -36,6 +36,9 @@ function constructGraphs() {
         metrics[i].critical=99.9;
       }
     }
+    else if (metrics[i].inverse) {
+      graphs[i].max=metrics[i].inverse;
+    }
     graphs[i].render();
   }
 }
@@ -45,11 +48,16 @@ function refreshData(immediately) {
 
   for (var i=0; i<graphs.length; i++) {
     getData(function(j, values) {
+      var percent = metrics[j].percent;
+      var inverse = metrics[j].inverse;
       for (var k=0; k<values.length; k++) {
-        if (values[k] && !isNaN(values[k].y) && metrics[j].percent)
-          datum[j][k] = {x:values[k].x, y:(100.0 * values[k].y) / metrics[j].percent};
-        else
-          datum[j][k] = values[k];
+        if (values[k] && !isNaN(values[k].y) && (percent || inverse)) {
+          if (percent)
+            values[k] = {x:values[k].x, y:(100.0 * values[k].y) / percent};
+          if (inverse)
+            values[k] = {x:values[k].x, y:(inverse - values[k].y)};
+        }
+        datum[j][k] = values[k];
       }
 
       // check our thresholds and update color
@@ -138,7 +146,7 @@ function updateGraphs(i) {
     } else {
       lastValueDisplay = parseInt(lastValue)
     }
-    if (metrics[i].percent && !isNaN(lastValue)) {
+    if (metrics[i].unit == '%' && !isNaN(lastValue)) {
       lastValueDisplay = lastValue.toFixed(0);
     }
     $('.overlay-name' + i).text(aliases[i]);
