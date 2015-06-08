@@ -31,6 +31,10 @@ function constructGraphs() {
     if (metrics[i].percent) {
       graphs[i].max=100.0;
       metrics[i].unit='%';
+      if (metrics[name] == "load_one") {
+        metrics[i].warning=74.9;
+        metrics[i].critical=99.9;
+      }
     }
     graphs[i].render();
   }
