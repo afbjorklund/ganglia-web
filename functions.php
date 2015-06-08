@@ -298,6 +298,33 @@ function find_limits($clustername,
 
 #------------------------------------------------------------------------------
 #
+# Finds the num of the given cluster & metric from the summary rrds.
+#
+function find_num($clustername, $hostname, $metricname)
+{
+    global $conf, $start, $end, $rrd_options;
+    $avg = 0;
+
+    if ($hostname)
+        $sum_dir = "${conf['rrds']}/$clustername/$hostname";
+    else
+        $sum_dir = "${conf['rrds']}/$clustername/__SummaryInfo__";
+
+    $command = $conf['rrdtool'] . " graph /dev/null $rrd_options ".
+        "--start $start --end $end ".
+        "DEF:num='$sum_dir/$metricname.rrd':'num':AVERAGE ".
+        "PRINT:num:AVERAGE:%.2lf ";
+    exec($command, $out);
+    if ( isset($out[1]) ) 
+      $avg = $out[1];
+    else
+      $avg = 0;
+    #echo "$sum_dir: num($metricname)=$avg<br>\n";
+    return $avg;
+}
+
+#------------------------------------------------------------------------------
+#
 # Finds the avg of the given cluster & metric from the summary rrds.
 #
 function find_avg($clustername, $hostname, $metricname)

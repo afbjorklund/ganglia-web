@@ -132,8 +132,13 @@ foreach ( $view_elements as $index => $element ) {
          global $start, $end;
          $start = '-30m';
          $end = 'now';
-         $avg_max = find_avg($element['cluster'], $element['hostname'], $element['percent']);
-         if ($avg_max == 0) $avg_max = 1;
+         if ($element['percent'] == 'num_nodes%') {
+           $num_nodes = find_num($element['cluster'], '', 'cpu_user');
+           $avg_max = $num_nodes * 100.0;
+         } else {
+           $avg_max = find_avg($element['cluster'], $element['hostname'], $element['percent']);
+           if ($avg_max == 0) $avg_max = 1;
+         }
          $tasseo_e['percent'] = $avg_max;
       }
       if ( isset($element['inverse']))
