@@ -20,7 +20,8 @@ if (isset($_GET['calendar_events_only'])) {
                        'cluster' => $event['cluster'],
                        'host_regex' => $event['host_regex'],
                        'start_time' => $event['start_time'],
-                       'description' => $event['description']);
+                       'description' => $event['description'],
+                       'url' => $event['url']);
 
     if (isset($event['end_time']))
       $cal_event['end_time'] = $event['end_time'];
@@ -46,7 +47,7 @@ function refreshOverlayEvent() {
 }
 
 $(function(){
-  $( "#add-event-dialog" ).dialog({height: 250,
+  $( "#add-event-dialog" ).dialog({height: 280,
                                    width: 500,
                                    autoOpen: false,
 	                           position: {
@@ -178,6 +179,8 @@ You can specify either start date or end date or both.<p>
   <table width=90%>
     <form id="event-actions-form">
     <tr><td>Event Summary:</td><td><input type="text" name="summary" id="event_summary" size=20></td></tr>
+    <tr><td>Event Description:</td><td><input type="text" name="description" id="description" size=20></td></tr>
+    <tr><td>Event URL:</td><td><input type="text" name="url" id="url" size=20></td></tr>
     <tr><td>Host Regex:</td><td><input type="text" name="host_regex" id="host_regex" size=20></td></tr>
     <tr><td>Start Date:</td><td><input type="text" title="Start Date" name="start_date" id="event-start-date" size=20></td></tr>
     <tr><td>End Date:</td><td><input type="text" title="End Date" name="end_date" id="event-end-date" size=20></td></tr>
@@ -202,6 +205,7 @@ if ($conf['display_events_using_calendar']) {
   print "<th>End Time</th>";
   print "<th>Summary</th>";
   print "<th>Description</th>";
+  print "<th>URL</th>";
   print "<th>Grid</th>";
   print "<th>Cluster</th>";
   print "<th>Host Regex</th>";
@@ -228,11 +232,13 @@ if ($conf['display_events_using_calendar']) {
     usort($events_array, 'start_time_cmp');
     foreach ( $events_array as $id => $event ) {
       $description = isset($event['description']) ? $event['description'] : "";
+      $url = isset($event['url']) ? $event['url'] : "";
       $end_time = isset($event['end_time']) ? date("Y/m/d H:i", $event['end_time']) : "";
       print "<tr><td>" . date("Y/m/d H:i", $event['start_time']) . "</td>" .
         "<td>" . $end_time . "</td>" .
         "<td>" . $event['summary'] . "</td>" .
         "<td>" . $description . "</td>" .
+        "<td>" . $url. "</td>" .
         "<td>" . $event['grid'] . "</td>" .
         "<td>" . $event['cluster'] . "</td>" .
         "<td>" . $event['host_regex'] . "</td>" .

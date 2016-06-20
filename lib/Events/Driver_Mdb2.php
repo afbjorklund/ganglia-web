@@ -16,7 +16,8 @@ function ganglia_events_add( $event ) {
   global $conf;
   $db =& MDB2::factory( $conf['overlay_events_dsn'] );
   if (DB::isError($db)) { api_return_error($db->getMessage()); }
-  $sql = "INSERT INTO overlay_events ( description, summary, grid, cluster, host_regex, start_time, end_time ) VALUES ( " .
+  $sql = "INSERT INTO overlay_events ( url, description, summary, grid, cluster, host_regex, start_time, end_time ) VALUES ( " .
+    ( isset($event['url']) ? $db->quote( $event['url'], 'text' ) : "NULL" ) . "," .
     ( isset($event['description']) ? $db->quote( $event['description'], 'text' ) : "NULL" ) . "," .
     ( isset($event['summary']) ? $db->quote( $event['summary'], 'text' ) : "NULL" ) . "," .
     ( isset($event['grid']) ? $db->quote( $event['grid'], 'text' ) : "NULL" ) . "," .
@@ -113,7 +114,7 @@ function ganglia_event_modify( $event ) {
     $clauses[] = "start_time = " . $db->quote( $start_time, 'integer' );
   } // end isset start_time
 
-  foreach(array('cluster', 'description', 'summary', 'grid', 'host_regex') AS $k) {
+  foreach(array('cluster', 'url', 'description', 'summary', 'grid', 'host_regex') AS $k) {
     if (isset( $event[$k] )) {
       $clauses[] = "${k} = " . $db->quote( $event[$k], 'text' );
     }

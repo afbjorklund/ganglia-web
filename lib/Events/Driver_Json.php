@@ -114,6 +114,7 @@ function ganglia_event_modify( $event ) {
       
       foreach(array('cluster', 
 		    'description', 
+		    'url',
 		    'summary', 
 		    'grid', 
 		    'host_regex') AS $k) {

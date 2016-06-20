@@ -6,6 +6,7 @@
 //    start_time => this is freeform as we'll see the PHP strtotime function to 
 //       convert to unix time stamp. You can also specify now 
 //    description => Event description
+//    url => Event URL
 //    host_regex => Host regular expression ie. web or web-0[2,4,5]
 ////////////////////////////////////////////////////////////////////////////////////
 // Make timestamp, description and host_regex have been supplied before proceeding
@@ -58,6 +59,7 @@ switch ( $_REQUEST['action'] ) {
     $grid = isset($_REQUEST['grid']) ? sanitize($_REQUEST['grid']) : "*";
     $cluster = isset($_REQUEST['cluster']) ? sanitize($_REQUEST['cluster']) : "*";
     $description = isset($_REQUEST['description']) ? sanitize($_REQUEST['description']) : "";
+    $url = isset($_REQUEST['url']) ? sanitize($_REQUEST['url']) : "";
     // Generate a unique event ID. This is so we can reference it later
     $event_id = uniqid();
 
@@ -67,7 +69,8 @@ switch ( $_REQUEST['action'] ) {
 		    "grid" => $grid, 
 		    "cluster" => $cluster, 
 		    "host_regex" => $_REQUEST['host_regex'],
-		    "description" => $description
+		    "description" => $description,
+		    "url" => $url
 		    );
 
     if ( isset($_REQUEST['end_time']) ) {
